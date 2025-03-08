@@ -11,7 +11,7 @@ export default function Main() {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [alert, setAlert] = useState(null);
+  const [alert, setAlert] = useState<{ message: string; type: string } | null>(null);
   const [isAdmin, setIsAdmin] = useState(false); // For admin status check
 
   // Fetch articles from the backend
@@ -43,7 +43,7 @@ export default function Main() {
     checkAdminStatus();
   }, []);
 
-  const showAlert = (message, type = 'info') => {
+  const showAlert = (message: string, type: string = 'info') => {
     setAlert({ message, type });
     setTimeout(() => setAlert(null), 3000);
   };
