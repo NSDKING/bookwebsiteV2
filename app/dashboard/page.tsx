@@ -28,6 +28,7 @@ export default function Main() {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ message: string; type: string } | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false); // For admin status check
+  const [userId, setUserId] = useState<string>(''); // Add userId state
 
   // Fetch articles from the backend
   const fetchArticles = async () => {
@@ -47,6 +48,7 @@ export default function Main() {
       const response = await fetch('/api/user/status');
       const data = await response.json();
       setIsAdmin(data.isAdmin);
+      setUserId(data.userId); // Assuming the user ID is returned here
     } catch (error) {
       console.error('Error checking admin status:', error);
       setIsAdmin(false);
@@ -70,7 +72,7 @@ export default function Main() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newArticle),
+        body: JSON.stringify({ ...newArticle, userId }), // Include userId in the request
       });
       
       if (response.ok) {
@@ -94,7 +96,7 @@ export default function Main() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedArticle),
+        body: JSON.stringify({ ...updatedArticle, userId }), // Include userId in the request
       });
       
       if (response.ok) {
@@ -213,6 +215,7 @@ export default function Main() {
         <Modal 
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleAddArticle}
+          userId={userId} // Pass userId to the Modal
         />
       )}
 
@@ -221,6 +224,7 @@ export default function Main() {
           article={currentArticle}
           onClose={() => setIsEditModalOpen(false)}
           onSubmit={handleEditArticle}
+          userId={userId} // Pass userId to the EditModal if needed
         />
       )}
     </div>
