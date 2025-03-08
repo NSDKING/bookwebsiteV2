@@ -11,9 +11,9 @@ const schema = a.schema({
       link: a.string(),
       descriptions: a.string(),
       positions: a.string(),
-      paragraphID: a.id().index("byParagraph"),
+      paragraphID: a.string(), // Changed from a.id().index("byParagraph")
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   Messages: a
     .model({
@@ -23,7 +23,7 @@ const schema = a.schema({
       note: a.string(),
       numero: a.string(),
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   Agenda: a
     .model({
@@ -33,48 +33,48 @@ const schema = a.schema({
       description: a.string(),
       image: a.string(),
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   Rubrique: a
     .model({
       id: a.id(),
       text: a.string(),
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   Paragraph: a
     .model({
       id: a.id(),
       text: a.string(),
       title: a.string(),
-      articlesID: a.id().index("byArticles"),
-      order: a.int(),
-      Images: a.hasMany("Images", { indexName: "byParagraph", fields: ["id"] }),
+      articlesID: a.string(), // Changed from a.id().index("byArticles")
+      order: a.integer(), // Changed from a.int()
+      Images: a.hasMany("Images"), // Removed indexName and fields properties
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   USER: a
     .model({
       id: a.id(),
       name: a.string(),
       editor: a.boolean(),
-      Articles: a.hasMany("Articles", { indexName: "byUSER", fields: ["id"] }),
+      Articles: a.hasMany("Articles"), // Removed indexName and fields properties
       admin: a.boolean(),
       logid: a.string(),
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 
   Articles: a
     .model({
       id: a.id(),
       Titles: a.string(),
       images: a.string(),
-      userID: a.id().index("byUSER"),
+      userID: a.string(), // Changed from a.id().index("byUSER")
       rubrique: a.string(),
-      Paragraphs: a.hasMany("Paragraph", { indexName: "byArticles", fields: ["id"] }),
+      Paragraphs: a.hasMany("Paragraph"), // Removed indexName and fields properties
       carrousel: a.boolean(),
     })
-    .authorization((allow) => [allow.public()]),
+    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
 });
 
 export type Schema = ClientSchema<typeof schema>;
