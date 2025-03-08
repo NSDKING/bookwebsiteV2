@@ -4,7 +4,6 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 // The section below creates various database tables based on the provided models.
 // Each model has its own fields and authorization rules.
 =========================================================================*/
-
 const schema = a.schema({
   Images: a
     .model({
@@ -50,7 +49,6 @@ const schema = a.schema({
       title: a.string(),
       articlesID: a.string(),
       order: a.integer(),
-      Images: a.hasMany("Images", "paragraphID"), // Added second parameter
     })
     .authorization((allow) => [allow.publicApiKey()]),
 
@@ -59,7 +57,6 @@ const schema = a.schema({
       id: a.id(),
       name: a.string(),
       editor: a.boolean(),
-      Articles: a.hasMany("Articles", "userID"), // Added second parameter
       admin: a.boolean(),
       logid: a.string(),
     })
@@ -72,7 +69,6 @@ const schema = a.schema({
       images: a.string(),
       userID: a.string(),
       rubrique: a.string(),
-      Paragraphs: a.hasMany("Paragraph", "articlesID"), // Added second parameter
       carrousel: a.boolean(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
