@@ -16,7 +16,7 @@ export default function ContactPage() {
   const [errorMessage, setErrorMessage] = useState(null);
 
  
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:any) => {
     try {
  
 
