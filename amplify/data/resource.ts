@@ -4,6 +4,7 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 // The section below creates various database tables based on the provided models.
 // Each model has its own fields and authorization rules.
 =========================================================================*/
+
 const schema = a.schema({
   Images: a
     .model({
@@ -11,9 +12,9 @@ const schema = a.schema({
       link: a.string(),
       descriptions: a.string(),
       positions: a.string(),
-      paragraphID: a.string(), // Changed from a.id().index("byParagraph")
+      paragraphID: a.string(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   Messages: a
     .model({
@@ -23,7 +24,7 @@ const schema = a.schema({
       note: a.string(),
       numero: a.string(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   Agenda: a
     .model({
@@ -33,48 +34,48 @@ const schema = a.schema({
       description: a.string(),
       image: a.string(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   Rubrique: a
     .model({
       id: a.id(),
       text: a.string(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   Paragraph: a
     .model({
       id: a.id(),
       text: a.string(),
       title: a.string(),
-      articlesID: a.string(), // Changed from a.id().index("byArticles")
-      order: a.integer(), // Changed from a.int()
-      Images: a.hasMany("Images"), // Removed indexName and fields properties
+      articlesID: a.string(),
+      order: a.integer(),
+      Images: a.hasMany("Images", "paragraphID"), // Added second parameter
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   USER: a
     .model({
       id: a.id(),
       name: a.string(),
       editor: a.boolean(),
-      Articles: a.hasMany("Articles"), // Removed indexName and fields properties
+      Articles: a.hasMany("Articles", "userID"), // Added second parameter
       admin: a.boolean(),
       logid: a.string(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 
   Articles: a
     .model({
       id: a.id(),
       Titles: a.string(),
       images: a.string(),
-      userID: a.string(), // Changed from a.id().index("byUSER")
+      userID: a.string(),
       rubrique: a.string(),
-      Paragraphs: a.hasMany("Paragraph"), // Removed indexName and fields properties
+      Paragraphs: a.hasMany("Paragraph", "articlesID"), // Added second parameter
       carrousel: a.boolean(),
     })
-    .authorization((allow) => [allow.publicApiKey()]), // Changed from allow.public()
+    .authorization((allow) => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
