@@ -77,7 +77,7 @@ export default function ContactPage() {
 
             <div className="form-group">
               <label htmlFor="message">Votre Message</label>
-              <textarea id="message" {...register("message", { required: true })} rows="4"></textarea>
+              <textarea id="message" {...register("message", { required: true })} rows={4}></textarea>
               {errors.message && <p className="error">Le message est requis</p>}
             </div>
 
