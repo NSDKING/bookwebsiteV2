@@ -5,20 +5,35 @@ import Header from '../components/adminHeader/index';
 import Modal from '../components/AddArticleModal/index';
 import EditModal from '../components/EditModal';
 
+interface Article {
+  id: string;
+  Titles: string;
+  Content: string;
+  CreatedAt: string;
+  rubrique: string; // Assuming you have a rubrique field
+  coverImagePreview?: string; // Optional if it may not always be present
+  paragraphs?: Array<{
+    text: string;
+    image?: File | null;
+    imagePreview?: string;
+    imageDescription?: string;
+  }>;
+}
+
 export default function Main() {
-  const [articles, setArticles] = useState([]);
-  const [currentArticle, setCurrentArticle] = useState(null);
-  const [search, setSearch] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
+  const [search, setSearch] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ message: string; type: string } | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false); // For admin status check
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); // For admin status check
 
   // Fetch articles from the backend
   const fetchArticles = async () => {
     try {
       const response = await fetch('/api/articles');
-      const data = await response.json();
+      const data: Article[] = await response.json(); // Specify the type of data
       setArticles(data);
     } catch (error) {
       console.error('Error fetching articles:', error);
@@ -48,7 +63,7 @@ export default function Main() {
     setTimeout(() => setAlert(null), 3000);
   };
 
-  const handleAddArticle = async (newArticle) => {
+  const handleAddArticle = async (newArticle: Article) => { // Specify the type for newArticle
     try {
       const response = await fetch('/api/articles', {
         method: 'POST',
@@ -59,7 +74,7 @@ export default function Main() {
       });
       
       if (response.ok) {
-        const addedArticle = await response.json();
+        const addedArticle: Article = await response.json(); // Specify the type for addedArticle
         setArticles([...articles, addedArticle]);
         setIsModalOpen(false);
         showAlert('Article added successfully', 'success');
@@ -72,7 +87,7 @@ export default function Main() {
     }
   };
 
-  const handleEditArticle = async (updatedArticle) => {
+  const handleEditArticle = async (updatedArticle: Article) => { // Specify the type for updatedArticle
     try {
       const response = await fetch(`/api/articles/${updatedArticle.id}`, {
         method: 'PUT',
@@ -97,12 +112,12 @@ export default function Main() {
     }
   };
    
-  const handleEditClick = (article) => {
+  const handleEditClick = (article: Article) => { // Specify the type for article
     setCurrentArticle(article);
     setIsEditModalOpen(true);
   };
 
-  const handleDeleteArticle = async (articleId) => {
+  const handleDeleteArticle = async (articleId: string) => { // Specify the type for articleId
     if (!isAdmin) {
       showAlert('Only administrators can delete articles', 'error');
       return;
